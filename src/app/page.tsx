@@ -13,7 +13,7 @@ export default function ChaosTimer() {
     let reconnectTimeout: NodeJS.Timeout;
     const connectWebSocket = () => {
       if (socket.current) return;
-      socket.current = new WebSocket("ws://192.168.18.174:8080");
+      socket.current = new WebSocket("wss://fair-websocket.onrender.com");
 
       socket.current.onopen = () => {
         console.log("WebSocket conectado");
@@ -33,7 +33,6 @@ export default function ChaosTimer() {
         reconnectTimeout = setTimeout(connectWebSocket, 5000);
       }
       socket.current.onerror = (error) => {
-        console.error("WebSocket error:", error);
         socket.current?.close();
       };
     }
@@ -76,7 +75,7 @@ export default function ChaosTimer() {
     setInputTime(e.target.value);
   };
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-neutral-900 text-gray-200 p-6">
+    <div className="flex flex-col items-center justify-center min-h-screen text-gray-200 p-6">
       <div className="absolute top-5 left-5 flex items-center gap-2">
         <span className={`w-4 h-4 rounded-full ${wsStatus === "connected" ? "bg-green-500" : "bg-red-500"}`}></span>
         <span>{wsStatus === "connected" ? "Connected" : "Disconnected"}</span>
@@ -87,7 +86,11 @@ export default function ChaosTimer() {
         {formatTime}
       </div>
       ) : (
-        <div className="text-2xl font-mono text-gray-200">Loading...</div>
+        <div className="text-2xl font-mono text-gray-200">
+          <span className="dot-animation delay-0">.</span>
+          <span className="dot-animation delay-150">.</span>
+          <span className="dot-animation delay-300">.</span>
+        </div>
       )}
       <div className="mt-5 flex gap-3">
         <button className="px-5 py-2 border border-gray-600 rounded-md text-gray-300 hover:bg-gray-800 cursor-pointer" onClick={() => {sendAction("start", inputTime);}}>
