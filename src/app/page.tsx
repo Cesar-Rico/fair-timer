@@ -52,6 +52,12 @@ export default function ChaosTimer() {
     return `${String(minutes).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
   }, [counter]);
 
+  useEffect(() => {
+    if (counter !== null) {
+      document.title = counter > 0 ? `FairTimer - ${formatTime}` : "FairTimer";
+    }
+  }, [counter, formatTime]);
+
   const sendAction = useCallback((action: string, message?: string | number) => {
     
 
